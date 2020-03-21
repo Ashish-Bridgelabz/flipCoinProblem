@@ -2,6 +2,8 @@
 #DISPLAY THE WELCOME TO FLIPCOIN STATEMENT
 echo "Welcome to flipcoin simuator"
 #DECLARE VARIABLE
+#DECLARE DICTIONARY
+declare -A FlipCoin
 count1=0
 count2=0
 count3=0
@@ -10,9 +12,12 @@ count5=0
 count6=0
 count7=0
 count8=0
-read -p "enter a value:" user
-declare -A FlipCoin
-FlipCoin=([H]=$count1 [T]=$count) 
+#LOGIC FOR SINGLET FLIPCOIN
+#WE ARE USING FUNCTION FOR SINGLET FLIPCOIN
+function singletFlipCoin()
+{
+FlipCoin=([H]=$count1 [T]=$count2)
+read -p "enter a value:" user 
 #USING LOOP FOR FLIP COIN MULTIPLE TIME
 for((iter=0;iter<$user;iter++))
 do
@@ -31,12 +36,16 @@ do
 	echo "${key}:${FlipCoin[$key]}"
 done 
 PercentageofHead=`echo "scale=2 ;(${FlipCoin[H]}*100)/$user" | bc -l`
-echo "Percentage of Head :" $PercentageofHead
+echo "Percentage of Head:"$PercentageofHead
 PercentageofTail=`echo "scale=2 ;(${FlipCoin[T]}*100)/$user" | bc -l`
-echo "Percentage of Tail :" $PercentageofTail 
-#STORE THE DOUBLET OF FLIPCOIN COMBINATION
-read -p "Enter the value" user 
+echo "Percentage of Tail:"$PercentageofTail
+} 
+#LOGIC FOR DOUBLET FLIPCOIN
+#WE ARE USING FUNCTION FOR DOUBLET FLIPCOIN 
+function doubletFlipCoin()
+{
 FlipCoin=([HH]=$count1 [HT]=$count2 [TT]=$count3 [TH]=$count4)
+read -p "enter a value:" user
 for((iter=0;iter<$user;iter++))
 do
 	checkFlipCoin=$((RANDOM%4))
@@ -60,19 +69,22 @@ for key in "${!FlipCoin[@]}"
 do
    echo "${key}:${FlipCoin[$key]}"
 done 
-#PRINTING PERSENTAGE OF DOUBLET FLIPING COIN
+#PRINTING PERCENTAGE OF DOUBLET FLIPING COIN
 HHPercentage=`echo "scale=2 ;(${FlipCoin[HH]}*100)/($user)" | bc -l`
-echo "Percentage of HH :" $HHPercentage
+echo "Percentage of HH:" $HHPercentage
 TTPercentage=`echo "scale=2 ;(${FlipCoin[TT]}*100)/($user)" | bc -l`
 echo "Percentage of TT:" $TTPercentage
 THPercentage=`echo "scale=2 ;(${FlipCoin[TH]}*100)/($user)" | bc -l`
 echo "Percentage of TH:" $THPercentage
 HTPercentage=`echo "scale=2 ;(${FlipCoin[HT]}*100)/($user)" | bc -l`
 echo "Percentage of HT:" $HTPercentage
-#DISPLAY TRIPLET
-#STORE THE DOUBLET OF FLIPCOIN COMBINATION
-read -p "Enter the value" user 
+}
+#LOGIC FOR TRIPLET FLIPCOIN
+#USING FUNCTION  FOR TRIPLET FLIPCOIN
+function tripletFlipCoin()
+{
 FlipCoin=([HHH]=$count1 [HHT]=$count2 [HTT]=$count3 [HTH]=$count4 [TTT]=$count5 [TTH]=$count6 [THH]=$count7 [THT]=$count8)
+read -p "enter a value:" user
 for((iter=0;iter<$user;iter++))
 do
    checkFlipCoin=$((RANDOM%8))
@@ -125,6 +137,42 @@ THHPercentage=`echo "scale=2 ;(${FlipCoin[THH]}*100)/($user)" | bc -l`
 echo "Percentage of THH:" $THHPercentage
 THTPercentage=`echo "scale=2 ;(${FlipCoin[THT]}*100)/($user)" | bc -l`
 echo "Percentage of THT:" $THTPercentage
+}
+#USING FOR SORTING 
+function sortTheValue()
+{     
+	echo "combination sorted form"
+	for value in "${!FlipCoin[@]}"
+	do
+	echo "$value : ${FlipCoin[$value]}"
+	done | sort -rn -k3
+	echo "winning combination"
+	for value in "${!FlipCoin[@]}"
+	do
+		echo  "$value : ${FlipCoin[$value]}"
+	done | sort -rn -k3 | head -1
+}
+        echo "1.FlipCoin for Singlet"
+        echo "2.Flipcoin for Doublet"
+        echo "3.flipcoin for Triplet"
+		read -p "enter your choice:" choice
+		case $choice in
+				1)
+					singletFlipCoin
+					;;
+				2)
+					doubletFlipCoin
+					;;
+				3)
+					tripletFlipCoin
+					;;
+				*)
+					echo "Invalid choice"
+					;;
+		esac
+#CALL THE SORT FUNCTION
+sortTheValue
+
 
 
 
